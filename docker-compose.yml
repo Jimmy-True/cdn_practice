@@ -46,9 +46,42 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/images
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_KAFKA_BROKERS=kafka:9092
     depends_on:
       - mongodb
       - redis
+      - kafka
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # specifies the security protocol for each listener
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      # specifies which listener to use for inter-broker communication
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      # tells clients how to connect to Kafka
+      # INTERNAL: For communication between Kafka brokers (port 9093)
+      # EXTERNAL: For external clients (port 9092)
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9093,EXTERNAL://localhost:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
 
 volumes:
   mongo-data:

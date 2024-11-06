@@ -1,5 +1,5 @@
 # cdn_practice
-A project practicing my skills of CDN, Nginx, SpringBoot (Java), Python3, Redis, Docker, and MongoDB
+A project practicing my skills of CDN, Nginx, SpringBoot (Java), Python3, Kafka, Redis, Docker, and MongoDB
 
 ## Installtion
 #### DNSMasq configuration (Optional)

@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class Image {
     @Id
-    private String id;
     private String name;
     private byte[] data;
 }
